@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"/>
+    <script>
+    function enviarForm() {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8000/login/",
+            data: JSON.stringify({username:$('username').val(),password:$('password').val()}),
+            contentType: "application/json; charset=utf-8;",
+            dataType: "json",
+            success: function (data) {
+                //alert(data.mensaje);
+                if (data.mensaje == "ok") {
+                    window.location = "http://localhost:8000"
+                }
+                else {
+                    $("#mensaje").text(data.mensaje);
+                    $(".alert").show();
+                }
+            },
+            failure: function (errMsg) {
+                alert("Hubo un error");
+            }
+        });
+        return false;
+    }
+</script>
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-danger" role="alert">
+            <label id="mensaje"></label>
+        </div>
+    </div>
+</div>
+
+
+<form method="post" action="" onsubmit="return enviarForm();">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+                <label class="control-label" for="username">usermame</label>
+                <input type="text" id="username" name="username" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="submit-btn btn btn-primary" value="Ingresar"/>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+    </div>
+</form>
+</body>
+</html>

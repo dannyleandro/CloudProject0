@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+{# Load the tag library #}
+
+{% load bootstrap4 %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Manager</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load staticfiles %}
+
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+    <!-- jQuery-ui library -->
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/video/jquery-ui/jquery-ui.css' %}">
+    <script type="text/javascript" src="{% static 'admin/video/jquery-ui/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/video/main.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/video/style.css' %}"/>
+
+
+    <script>
+
+        $(document).on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal');
+        });
+
+        (function () {
+            $.getJSON("http://localhost:8000/isLogged").done(function (data) {
+                if (data.mensaje == "no") {
+                    $("#mod_user").hide()
+                    $("#add_user").show()
+                    $("#logout").hide()
+                    $("#login").show()
+                }
+                else {
+                    $.getJSON("http://localhost:8000/getUser").done(function (data) {
+                            document.getElementById('mod_username').innerHTML = '<i class="fas fa-user-edit"></i>&nbsp; ' + data.username;
+                        }
+                    );
+                    $("#mod_user").show()
+                    $("#add_user").hide()
+                    $("#logout").show()
+                    $("#login").hide()
+                }
+            });
+        })();
+
+        function logout() {
+            $.getJSON("http://localhost:8000/logout").done(function (data) {
+                if (data.mensaje == "ok") {
+                    location.reload();
+                }
+                else {
+                    alert("Ocurrió un error")
+                }
+            });
+        }
+
+    </script>
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded fixed-top">
+    <div class="container-fluid">
+        <!-- Header -->
+
+        <a class="navbar-brand" href="{% url 'index' %}">Event Manager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Items -->
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item" id="proyecto">
+                    <a class="nav-link" href="{% url 'addEvent' %}"> Add Event</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">link1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">link2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">link3</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-9">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+    </div>
+</div>
+
+<!-- Ventana Modal General -->
+
+
+<div id="form-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modal title</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="form-modal-body" class="modal-body">
+
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+
+    $('#btnSignup').click(function () {
+        $("h3.modal-title").text("Registro de Usuarios")
+        $('#form-modal-body').load('/agregarUsuario/', function () {
+            $('#form-modal').modal('toggle');
+            formAjaxSubmit('#form-modal-body form', '#form-modal');
+        });
+    });
+
+    $('#btnLogin').click(function () {
+        $("h3.modal-title").text("Ingreso de Usuarios")
+        $('#form-modal-body').load('/ingresar/', function () {
+            $('#form-modal').modal('toggle');
+            formAjaxSubmit('#form-modal-body form', '#form-modal');
+        });
+    });
+
+
+    function abrir_modal_bootstrap(url, tipo) {
+        $("h3.modal-title").text("Detalles " + tipo)
+        $('#form-modal-body').load(url, function () {
+            $('#form-modal').modal('toggle');
+            formAjaxSubmit('#form-modal-body form', '#form-modal');
+        });
+
+
+    }
+</script>
+
+</body>
+</html>

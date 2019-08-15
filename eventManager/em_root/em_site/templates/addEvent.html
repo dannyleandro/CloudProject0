@@ -1,0 +1,32 @@
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Event</title>
+</head>
+<body>
+{% block content %}
+    <div class="row">
+    <div class="col-md-6 col-sm-offset-3">
+        <div class="page-header">
+            <h2>Add Event</h2>
+        </div>
+        <form method="POST" action ="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form AddEventform %}
+        {% buttons %}
+        <input type="submit" value="Add" class="btn btn-primary"/>
+        <a href="/" class="btn btn-primary">Cancelar</a>
+        {% endbuttons %}
+        </form>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

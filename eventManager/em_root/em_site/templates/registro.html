@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"/>
+    <script>
+    function enviarForm() {
+        if($('#password').val() != $('#password2').val())
+        {
+            alert('Las contraseñas no coinciden');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8000/addUser/",
+            data: JSON.stringify({username:$('#username').val(), first_name: $('#first_name').val(), last_name: $('#last_name').val(),password:$('#password').val(), email: $('#email').val()}),
+            contentType: "application/json; charset=utf-8;",
+            dataType: "json",
+            success: function (data) {
+                //alert(data.mensaje);
+                    window.location = "http://localhost:8000"
+            },
+            failure: function (errMsg) {
+                alert("Hubo un error");
+            }
+        });
+        return false;
+    }
+</script>
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-danger" role="alert">
+            <label id="mensaje"></label>
+        </div>
+    </div>
+</div>
+
+
+<form method="post" action="" onsubmit="return enviarForm();">
+    <div class="row">
+        <div class="col-md-6 col-sm-offset-3">
+            <input id="username" name="username" type="text" placeholder="User name" class="form-control input-md"
+                   required=""><br>
+            <input id="first_name" name="first_name" type="text" placeholder="First name" class="form-control input-md"
+                   required=""><br>
+            <input id="last_name" name="last_name" type="text" placeholder="Last name" class="form-control input-md"
+                   required=""><br>
+            <input id="email" name="email" type="email" placeholder="Email" class="form-control input-md"
+                   required=""><br>
+            <input id="password" name="password" type="password" placeholder="Password" class="form-control input-md"
+                   required=""><br>
+            <input id="password2" name="password2" type="password" placeholder="Verify password"
+                   class="form-control input-md" required=""><br>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <input type="submit" class="submit-btn btn btn-primary" value="Registarse"/>
+        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-primary">Cancelar
+        </button>
+    </div>
+</form>
+</body>
+</html>
